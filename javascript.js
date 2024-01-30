@@ -61,6 +61,10 @@ function Game(
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
     }
 
+    const resetWinner = () => {
+        winner = null;
+    }
+
     const getActivePlayer = () => activePlayer;
 
     const printNewRound = () => {
@@ -139,17 +143,23 @@ function Game(
     return {
         playRound,
         //getWinner,
+        resetWinner,
+        switchPlayerTurn,
         getActivePlayer,
         getBoard: board.getBoard
     };
 }
 
 //add UI
+
+
 function ScreenController(){
-    const game = Game();
+    let game = Game();
     const playerTurnDiv = document.querySelector(".turn");
     const boardDiv = document.querySelector(".board");
     const resultsDiv = document.querySelector(".results");
+
+    const nameForm = document.getElementById("nameForm");
 
     //let winner = game.getWinner();
 
@@ -199,12 +209,52 @@ function ScreenController(){
         }
     }
 
-    boardDiv.addEventListener("click", clickHandlerBoard);
+    function startGame(){
+        let player1Name = document.getElementById("player1").value || "Player One";
+        let player2Name = document.getElementById("player2").value || "Player Two";
+
+        game = Game(player1Name, player2Name);
+
+        nameForm.style.display = "none";
+        updateScreen();
+
+        boardDiv.addEventListener("click", clickHandlerBoard);
+    }
+
+    const startButton = document.getElementById("startButton");
+    startButton.addEventListener("click", startGame);
+
+    //boardDiv.addEventListener("click", clickHandlerBoard);
     
+    function restartGame(){
+        //reset board
+        game.getBoard().forEach(row => {
+            row.forEach(cell => {
+                cell.addValue(null);
+            });
+        });
+            
+        //reset player turn
+        game.switchPlayerTurn();
+
+        //reset winner
+        game.resetWinner();
+        
+        updateScreen();
+
+        resultsDiv.textContent = "";
+    }
+
+    const restartButton = document.getElementById("restartButton");
+    restartButton.addEventListener("click", restartGame);
+
     updateScreen();
 }
 
-ScreenController();
+window.addEventListener("DOMContentLoaded", function() {
+    ScreenController();
+}) 
+
 
 //const myGame = new Game(); // create an instance of the game
 //myGame.playRound(0, 0);

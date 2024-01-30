@@ -7,11 +7,21 @@
     <link rel="stylesheet" href="styles.css">
     <script src="javascript.js" defer></script>
 </head>
-<body>
+<body></body>
     <div class="container">
+        <form id="nameForm">
+            <label for="player1">Player One Name:</label>
+            <input type="text" id="player1" name="player1" required>
+    
+            <label for="player2">Player Two Name:</label>
+            <input type="text" id="player2" name="player2" required>
+    
+            <button type="button" id="startButton">Start Game</button>
+        </form>
         <h1 class="turn"></h1>
         <div class="board"></div>
         <div class="results"></div>
+        <button type="button" id="restartButton">Restart</button>
     </div>
 </body>
 </html>
